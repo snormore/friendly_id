@@ -21,6 +21,19 @@ module FriendlyId
     # identically to numeric ids in finders.
     #
     # @example
+    #  person = Person.find_by_id(123)
+    #  person = Person.find_by_id("joe")
+    #
+    # @see FriendlyId::ObjectUtils
+    def find_by_id(id)
+      return super if id.unfriendly_id?
+      where(@klass.friendly_id_config.query_field => id).first or super
+    end
+
+    # FriendlyId overrides this method to make it possible to use friendly id's
+    # identically to numeric ids in finders.
+    #
+    # @example
     #  person = Person.exists?(123)
     #  person = Person.exists?("joe")
     #  person = Person.exists?({:name => 'joe'})
